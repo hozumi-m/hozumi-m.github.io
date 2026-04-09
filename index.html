@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>森の隠し図書館 | 本と出会う場所</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest-deep: #1a2e1a;
+    --forest-dark: #2d4a2d;
+    --forest-mid: #3d6b3d;
+    --forest-light: #5a8f5a;
+    --moss: #7aad6a;
+    --leaf: #a8cc8a;
+    --mist: #c8dfc0;
+    --paper: #f5f0e8;
+    --paper-warm: #ede8dc;
+    --bark: #6b4f35;
+    --ink: #1e1e1e;
+    --ink-light: #3a3a3a;
+    --gold: #c4923a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    background: var(--forest-deep);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* Forest background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(61,107,61,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(45,74,45,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(26,46,26,0.3) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header */
+  header {
+    position: relative;
+    background: linear-gradient(180deg, var(--forest-deep) 0%, var(--forest-dark) 100%);
+    padding: 0;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Forest + Library SVG scene */
+  .forest-scene {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 280px;
+  }
+
+  .forest-scene svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes sway-left {
+    0%, 100% { transform: rotate(0deg); transform-origin: bottom center; }
+    30% { transform: rotate(1.2deg); transform-origin: bottom center; }
+    70% { transform: rotate(-0.8deg); transform-origin: bottom center; }
+  }
+  @keyframes sway-right {
+    0%, 100% { transform: rotate(0deg); transform-origin: bottom center; }
+    30% { transform: rotate(-1deg); transform-origin: bottom center; }
+    70% { transform: rotate(0.9deg); transform-origin: bottom center; }
+  }
+  @keyframes window-glow {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; }
+  }
+
+  .tree-grp-l1 { animation: sway-left 5s ease-in-out infinite; }
+  .tree-grp-l2 { animation: sway-right 6.5s ease-in-out infinite; }
+  .tree-grp-l3 { animation: sway-left 4.5s ease-in-out infinite 1s; }
+  .tree-grp-r1 { animation: sway-right 5.5s ease-in-out infinite 0.5s; }
+  .tree-grp-r2 { animation: sway-left 7s ease-in-out infinite 1.5s; }
+  .tree-grp-r3 { animation: sway-right 4.8s ease-in-out infinite 0.8s; }
+  .window-warm { animation: window-glow 4s ease-in-out infinite; }
+
+  /* Floating particles (light through leaves) */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--moss);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-up 8s ease-in-out infinite;
+  }
+
+  .particle:nth-child(1) { left: 15%; animation-delay: 0s; }
+  .particle:nth-child(2) { left: 30%; animation-delay: 2s; width: 2px; height: 2px; }
+  .particle:nth-child(3) { left: 50%; animation-delay: 4s; }
+  .particle:nth-child(4) { left: 70%; animation-delay: 1s; width: 2px; height: 2px; }
+  .particle:nth-child(5) { left: 85%; animation-delay: 3s; }
+  .particle:nth-child(6) { left: 42%; animation-delay: 5s; width: 2px; height: 2px; }
+
+  @keyframes float-up {
+    0% { transform: translateY(200px); opacity: 0; }
+    20% { opacity: 0.6; }
+    80% { opacity: 0.3; }
+    100% { transform: translateY(-50px); opacity: 0; }
+  }
+
+  /* Header content */
+  .header-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 20px 80px;
+  }
+
+  .site-badge {
+    display: inline-block;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--moss);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding: 6px 16px;
+    border: 1px solid rgba(122,173,106,0.3);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .site-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 700;
+    color: var(--paper);
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    margin-bottom: 16px;
+    animation: fade-in 1.2s ease forwards;
+  }
+
+  .site-subtitle {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--mist);
+    letter-spacing: 0.25em;
+    animation: fade-in 1.5s ease forwards;
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Ground line */
+  .ground-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--moss), var(--forest-light), var(--moss), transparent);
+    opacity: 0.4;
+  }
+
+  /* Navigation */
+  nav {
+    background: var(--forest-dark);
+    border-bottom: 1px solid rgba(122,173,106,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 0;
+    width: 100%;
+  }
+
+  nav a {
+    display: block;
+    padding: 16px 28px;
+    color: var(--mist);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--moss);
+    transition: width 0.3s ease;
+  }
+
+  nav a:hover { color: var(--leaf); }
+  nav a:hover::after { width: 60%; }
+
+  /* ハンバーガーボタン（スマホのみ表示） */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    z-index: 110;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--mist);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  /* 開いた状態のX */
+  .hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 768px) {
+    .content-layout { grid-template-columns: 1fr; }
+    .featured { padding: 28px 24px 28px 32px; }
+
+    .hamburger { display: flex; }
+
+    .nav-inner { justify-content: flex-start; padding: 0 16px; min-height: 48px; }
+
+    nav ul {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--forest-dark);
+      border-bottom: 1px solid rgba(122,173,106,0.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 100;
+    }
+
+    nav ul.open {
+      display: flex;
+    }
+
+    nav ul li {
+      border-bottom: 1px solid rgba(122,173,106,0.1);
+    }
+
+    nav ul li:last-child { border-bottom: none; }
+
+    nav a {
+      padding: 16px 24px;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    nav a::after { display: none; }
+
+    /* スマホ時のサイトタイトル */
+    .nav-site-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 14px;
+      color: var(--leaf);
+      letter-spacing: 0.15em;
+      padding: 0 8px;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .nav-site-title { display: none; }
+  }
+
+  /* Main layout */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Section title */
+  .section-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--moss);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(122,173,106,0.4), transparent);
+  }
+
+  /* Book cards grid */
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+    margin-bottom: 80px;
+  }
+
+  .book-card {
+    background: #fff1cf;
+    border-radius: 4px;
+    overflow: visible;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .book-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 4px 0 0 4px;
+    background: linear-gradient(180deg, var(--forest-mid), var(--moss));
+  }
+
+  /* 栞マーク（新着） */
+  .book-card.is-new::after {
+    content: '新着';
+    position: absolute;
+    top: -2px;
+    right: 18px;
+    width: 28px;
+    padding: 8px 0 14px;
+    background: linear-gradient(180deg, #d4711a 0%, #e8922a 60%, #c4601a 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.4;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+    box-shadow: 2px 4px 12px rgba(180,90,20,0.4);
+    z-index: 10;
+    writing-mode: vertical-rl;
+    padding: 10px 6px 18px;
+  }
+
+  .book-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .book-card-inner {
+    padding: 28px 24px 24px 30px;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .book-category {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--forest-mid);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .book-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .book-author {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .book-summary {
+    font-size: 15px;
+    color: var(--ink-light);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .book-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .book-verdict {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .verdict-buy {
+    background: rgba(61,107,61,0.12);
+    color: var(--forest-mid);
+    border: 1px solid rgba(61,107,61,0.25);
+  }
+
+  .book-date {
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 300;
+  }
+
+  .read-more {
+    font-size: 13px;
+    color: var(--forest-mid);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .read-more:hover { color: var(--moss); }
+  .read-more::after { content: '→'; }
+
+  /* Featured article */
+  .featured {
+    background: #fff1cf;
+    border-radius: 4px;
+    padding: 48px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: visible;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .featured-bookmark {
+    position: absolute;
+    top: -2px;
+    right: 32px;
+    width: 32px;
+    padding: 10px 7px 20px;
+    background: linear-gradient(180deg, #d4711a 0%, #e8922a 60%, #c4601a 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+    box-shadow: 2px 4px 14px rgba(180,90,20,0.45);
+    z-index: 10;
+    writing-mode: vertical-rl;
+    line-height: 1;
+  }
+
+  .featured::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    border-radius: 4px 0 0 4px;
+    background: linear-gradient(180deg, var(--forest-dark), var(--moss), var(--leaf));
+  }
+
+  .featured::after {
+    content: '森の一冊';
+    position: absolute;
+    top: 24px;
+    right: 80px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 11px;
+    color: var(--moss);
+    letter-spacing: 0.3em;
+    opacity: 0.6;
+  }
+
+  .featured-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    color: var(--moss);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .featured-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .featured-author {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+
+  .featured-body {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--ink-light);
+    margin-bottom: 28px;
+    max-width: 640px;
+  }
+
+  .featured-points {
+    list-style: none;
+    margin-bottom: 28px;
+  }
+
+  .featured-points li {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-light);
+    padding: 8px 0 8px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .featured-points li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--moss);
+    font-size: 8px;
+    top: 11px;
+  }
+
+  .verdict-tag {
+    display: inline-block;
+    background: var(--forest-dark);
+    color: var(--leaf);
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Sidebar */
+  .content-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .content-layout { grid-template-columns: 1fr; }
+    .featured { padding: 28px 24px 28px 32px; }
+    nav ul { gap: 0; }
+    nav a { padding: 14px 16px; font-size: 12px; }
+  }
+
+  .sidebar-widget {
+    background: rgba(45,74,45,0.6);
+    border: 1px solid rgba(122,173,106,0.2);
+    border-radius: 4px;
+    padding: 28px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(4px);
+  }
+
+  .widget-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--leaf);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(122,173,106,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  .widget-list {
+    list-style: none;
+  }
+
+  .widget-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(122,173,106,0.1);
+    font-size: 13px;
+    color: var(--mist);
+    line-height: 1.5;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .widget-list li:last-child { border-bottom: none; }
+  .widget-list li:hover { color: var(--leaf); }
+
+  .widget-list li span {
+    display: block;
+    font-size: 11px;
+    color: rgba(200,223,192,0.5);
+    margin-top: 3px;
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 5px 12px;
+    border: 1px solid rgba(122,173,106,0.3);
+    border-radius: 20px;
+    color: var(--mist);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .tag:hover {
+    background: rgba(122,173,106,0.15);
+    color: var(--leaf);
+    border-color: rgba(122,173,106,0.5);
+  }
+
+  /* About section */
+  .about-box {
+    text-align: center;
+  }
+
+  .about-icon {
+    width: 80px;
+    height: 80px;
+    background: #2a1a08;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    border: 3px solid rgba(122,173,106,0.3);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+
+  .about-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    color: var(--leaf);
+    margin-bottom: 10px;
+  }
+
+  .about-text {
+    font-size: 12px;
+    color: var(--mist);
+    line-height: 1.8;
+    opacity: 0.8;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--forest-deep);
+    border-top: 1px solid rgba(122,173,106,0.15);
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    color: var(--mist);
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(200,223,192,0.4);
+    letter-spacing: 0.2em;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  <div class="forest-scene">
+    <svg viewBox="0 0 1200 280" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a2e1a" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#2d4a2d" stop-opacity="0.5"/>
+        </linearGradient>
+        <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6b4a2a"/>
+          <stop offset="100%" stop-color="#4a3018"/>
+        </linearGradient>
+        <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a2510"/>
+          <stop offset="100%" stop-color="#2a1a08"/>
+        </linearGradient>
+        <linearGradient id="winGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f5d080"/>
+          <stop offset="100%" stop-color="#e8a030"/>
+        </linearGradient>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2d4a2d"/>
+          <stop offset="100%" stop-color="#1a2e1a"/>
+        </linearGradient>
+        <filter id="blur-slight">
+          <feGaussianBlur stdDeviation="1.5"/>
+        </filter>
+        <filter id="blur-bg">
+          <feGaussianBlur stdDeviation="3"/>
+        </filter>
+      </defs>
+
+      <!-- Ground -->
+      <rect x="0" y="240" width="1200" height="40" fill="url(#groundGrad)"/>
+
+      <!-- ========== MANSION (center, behind trees) ========== -->
+      <!-- Main body -->
+      <rect x="440" y="80" width="320" height="165" fill="url(#wallGrad)" filter="url(#blur-slight)"/>
+      <!-- Stone texture lines -->
+      <line x1="440" y1="110" x2="760" y2="110" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="140" x2="760" y2="140" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="170" x2="760" y2="170" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="200" x2="760" y2="200" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <!-- Vertical stone lines -->
+      <line x1="520" y1="80" x2="520" y2="245" stroke="#5a3d1e" stroke-width="1" opacity="0.3"/>
+      <line x1="600" y1="80" x2="600" y2="245" stroke="#5a3d1e" stroke-width="1" opacity="0.3"/>
+      <line x1="680" y1="80" x2="680" y2="245" stroke="#5a3d1e" stroke-width="1" opacity="0.3"/>
+
+      <!-- Left wing -->
+      <rect x="380" y="115" width="80" height="130" fill="#5f4020" filter="url(#blur-slight)"/>
+      <!-- Right wing -->
+      <rect x="740" y="115" width="80" height="130" fill="#5f4020" filter="url(#blur-slight)"/>
+
+      <!-- Main roof (gable) -->
+      <polygon points="420,80 600,20 780,80" fill="url(#roofGrad)" filter="url(#blur-slight)"/>
+      <!-- Left wing roof -->
+      <polygon points="365,115 420,80 460,115" fill="#2a1a08" filter="url(#blur-slight)"/>
+      <!-- Right wing roof -->
+      <polygon points="740,115 780,80 835,115" fill="#2a1a08" filter="url(#blur-slight)"/>
+
+      <!-- Chimney left -->
+      <rect x="470" y="18" width="18" height="40" fill="#3a2510" filter="url(#blur-slight)"/>
+      <!-- Chimney right -->
+      <rect x="700" y="18" width="18" height="40" fill="#3a2510" filter="url(#blur-slight)"/>
+
+      <!-- Dormer window center -->
+      <polygon points="575,32 600,18 625,32" fill="#2a1a08" filter="url(#blur-slight)"/>
+      <rect x="582" y="32" width="36" height="22" fill="#3a2510" filter="url(#blur-slight)"/>
+      <rect x="586" y="35" width="12" height="16" fill="url(#winGlow)" opacity="0.8" class="window-warm"/>
+      <rect x="602" y="35" width="12" height="16" fill="url(#winGlow)" opacity="0.8" class="window-warm"/>
+
+      <!-- 2F windows (main) -->
+      <g class="window-warm">
+        <rect x="490" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="493" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="507" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <!-- arch top -->
+        <path d="M490,102 Q505,90 520,102" fill="#2a1a08"/>
+      </g>
+      <g class="window-warm">
+        <rect x="585" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="588" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="602" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <path d="M585,102 Q600,90 615,102" fill="#2a1a08"/>
+      </g>
+      <g class="window-warm">
+        <rect x="680" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="683" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="697" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <path d="M680,102 Q695,90 710,102" fill="#2a1a08"/>
+      </g>
+
+      <!-- 1F windows -->
+      <g class="window-warm">
+        <rect x="490" y="158" width="30" height="45" rx="1" fill="#2a1a08"/>
+        <rect x="493" y="161" width="11" height="39" fill="url(#winGlow)" opacity="0.75"/>
+        <rect x="507" y="161" width="11" height="39" fill="url(#winGlow)" opacity="0.75"/>
+      </g>
+      <g class="window-warm">
+        <rect x="680" y="158" width="30" height="45" rx="1" fill="#2a1a08"/>
+        <rect x="683" y="161" width="11" height="39" fill="url(#winGlow)" opacity="0.75"/>
+        <rect x="697" y="161" width="11" height="39" fill="url(#winGlow)" opacity="0.75"/>
+      </g>
+
+      <!-- Main entrance door (arched) -->
+      <rect x="572" y="180" width="56" height="65" rx="1" fill="#2a1a08"/>
+      <path d="M572,185 Q600,162 628,185" fill="#2a1a08"/>
+      <rect x="576" y="186" width="22" height="58" fill="#1e1408" opacity="0.9"/>
+      <rect x="602" y="186" width="22" height="58" fill="#1e1408" opacity="0.9"/>
+      <!-- door knobs -->
+      <circle cx="597" cy="218" r="3" fill="#c4923a" opacity="0.8"/>
+      <circle cx="603" cy="218" r="3" fill="#c4923a" opacity="0.8"/>
+
+      <!-- Steps -->
+      <rect x="555" y="240" width="90" height="8" rx="1" fill="#4a3018" opacity="0.8"/>
+      <rect x="562" y="235" width="76" height="6" rx="1" fill="#5a3d1e" opacity="0.7"/>
+
+      <!-- Wing windows -->
+      <g class="window-warm">
+        <rect x="395" y="145" width="28" height="38" rx="1" fill="#2a1a08"/>
+        <rect x="398" y="148" width="10" height="32" fill="url(#winGlow)" opacity="0.7"/>
+        <rect x="411" y="148" width="10" height="32" fill="url(#winGlow)" opacity="0.7"/>
+      </g>
+      <g class="window-warm">
+        <rect x="753" y="145" width="28" height="38" rx="1" fill="#2a1a08"/>
+        <rect x="756" y="148" width="10" height="32" fill="url(#winGlow)" opacity="0.7"/>
+        <rect x="769" y="148" width="10" height="32" fill="url(#winGlow)" opacity="0.7"/>
+      </g>
+
+      <!-- Cornices / trims -->
+      <rect x="430" y="78" width="340" height="6" fill="#3a2510" opacity="0.6"/>
+      <rect x="370" y="113" width="460" height="5" fill="#3a2510" opacity="0.5"/>
+
+      <!-- ========== TREES ========== -->
+
+      <!-- Far background trees (blurred, dark) -->
+      <g opacity="0.25" filter="url(#blur-bg)">
+        <polygon points="100,280 130,160 160,280" fill="#1e3d1e"/>
+        <polygon points="120,280 145,190 170,280" fill="#243f24"/>
+        <polygon points="980,280 1010,155 1040,280" fill="#1e3d1e"/>
+        <polygon points="1000,280 1025,185 1050,280" fill="#243f24"/>
+        <polygon points="300,280 325,175 350,280" fill="#1e3d1e"/>
+        <polygon points="850,280 875,170 900,280" fill="#1e3d1e"/>
+      </g>
+
+      <!-- LEFT trees — foreground, dark, overlapping mansion -->
+      <!-- Tree group far left -->
+      <g class="tree-grp-l1">
+        <polygon points="0,280 45,100 90,280" fill="#1a3020"/>
+        <polygon points="15,280 45,130 75,280" fill="#1e3820"/>
+        <polygon points="5,280 45,155 85,280" fill="#162818"/>
+        <!-- trunk -->
+        <rect x="38" y="240" width="14" height="40" fill="#2a1a08"/>
+      </g>
+      <!-- Tree group left-center -->
+      <g class="tree-grp-l2">
+        <polygon points="80,280 130,85 180,280" fill="#1e3820"/>
+        <polygon points="95,280 130,115 165,280" fill="#243f24"/>
+        <polygon points="88,280 130,145 172,280" fill="#182d18"/>
+        <rect x="122" y="238" width="16" height="42" fill="#2a1a08"/>
+      </g>
+      <!-- Tree group blocking left side of mansion -->
+      <g class="tree-grp-l3">
+        <polygon points="230,280 295,60 360,280" fill="#1a2e1a"/>
+        <polygon points="250,280 295,95 340,280" fill="#1e3520"/>
+        <polygon points="240,280 295,128 350,280" fill="#162618"/>
+        <polygon points="255,280 295,158 335,280" fill="#1e3820"/>
+        <rect x="286" y="236" width="18" height="44" fill="#2a1a08"/>
+      </g>
+
+      <!-- RIGHT trees -->
+      <!-- Tree group blocking right side of mansion -->
+      <g class="tree-grp-r1">
+        <polygon points="840,280 905,60 970,280" fill="#1a2e1a"/>
+        <polygon points="860,280 905,95 950,280" fill="#1e3520"/>
+        <polygon points="850,280 905,128 960,280" fill="#162618"/>
+        <polygon points="865,280 905,158 945,280" fill="#1e3820"/>
+        <rect x="896" y="236" width="18" height="44" fill="#2a1a08"/>
+      </g>
+      <!-- Tree group right-center -->
+      <g class="tree-grp-r2">
+        <polygon points="1020,280 1070,85 1120,280" fill="#1e3820"/>
+        <polygon points="1035,280 1070,115 1105,280" fill="#243f24"/>
+        <polygon points="1028,280 1070,145 1112,280" fill="#182d18"/>
+        <rect x="1062" y="238" width="16" height="42" fill="#2a1a08"/>
+      </g>
+      <!-- Tree group far right -->
+      <g class="tree-grp-r3">
+        <polygon points="1110,280 1155,100 1200,280" fill="#1a3020"/>
+        <polygon points="1125,280 1155,130 1185,280" fill="#1e3820"/>
+        <polygon points="1115,280 1155,155 1195,280" fill="#162818"/>
+        <rect x="1148" y="240" width="14" height="40" fill="#2a1a08"/>
+      </g>
+
+      <!-- Ground overlay to unify base -->
+      <rect x="0" y="255" width="1200" height="25" fill="#1a2e1a"/>
+      <!-- Grass/moss line -->
+      <rect x="0" y="252" width="1200" height="6" fill="#2d4a2d" opacity="0.7"/>
+
+      <!-- Atmospheric overlay (depth/mist) -->
+      <rect x="0" y="0" width="1200" height="280" fill="url(#skyGrad)"/>
+    </svg>
+  </div>
+  <div class="header-content">
+    <div class="site-badge">Book Review</div>
+    <h1 class="site-title">森の隠し図書館</h1>
+    <p class="site-subtitle">面白そうで手に取った本と、静かに向き合う場所</p>
+  </div>
+  <div class="ground-line"></div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-site-title">森の隠し図書館</span>
+    <button class="hamburger" id="hamburger" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="#">すべての本</a></li>
+      <li><a href="#">雑学・教養</a></li>
+      <li><a href="#">実用・ビジネス</a></li>
+      <li><a href="#">心理・行動</a></li>
+      <li><a href="#">このブログについて</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="content-layout">
+    <div class="main-col">
+
+      <p class="section-title">最新のレビュー</p>
+
+      <!-- Featured -->
+      <div class="featured reveal">
+        <div class="featured-bookmark">新着</div>
+        <p class="featured-label">今月の一冊</p>
+        <h2 class="featured-title">逆転交渉術<br>まずは「ノー」を引き出せ</h2>
+        <p class="featured-author">クリス・ヴォス 著</p>
+        <p class="featured-body">元FBI交渉人が、人質交渉の現場で磨いた心理術をビジネスや日常に応用する本。「交渉は論破ではなく誘導だ」という視点の転換が面白い。</p>
+        <ul class="featured-points">
+          <li>「ノー」は拒絶じゃなく交渉の起点。相手に「ノー」と言わせることで安心感を与え、そこから本音を引き出す</li>
+          <li>相手の感情を言語化する「ラベリング」が実体験ベースで語られていて説得力がある</li>
+          <li>「なぜ」より「どうしたら」で質問しろという細かい使い分けが刺さった</li>
+        </ul>
+        <span class="verdict-tag">買い ◎ — 交渉を技術として捉え直したい人に</span>
+      </div>
+
+      <!-- Books grid -->
+      <div class="books-grid">
+        <div class="book-card is-new reveal">
+          <div class="book-card-inner">
+            <p class="book-category">健康・運動</p>
+            <h3 class="book-title">体力おばけへの道</h3>
+            <p class="book-author">澤木一貴 著</p>
+            <p class="book-summary">疲れにくい体は才能じゃなくて習慣。行動体力と防衛体力の2種類を知るだけで、体への向き合い方が変わる。</p>
+            <div class="book-meta">
+              <span class="book-verdict verdict-buy">買い ◎</span>
+              <a href="#" class="read-more">続きを読む</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-card reveal">
+          <div class="book-card-inner">
+            <p class="book-category">次の一冊</p>
+            <h3 class="book-title">読書中…</h3>
+            <p class="book-author">—</p>
+            <p class="book-summary">次のレビューをお楽しみに。面白そうで手に取った本を、ゆっくり紹介していきます。</p>
+            <div class="book-meta">
+              <span class="book-date">近日公開</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <aside>
+      <div class="sidebar-widget reveal about-box">
+        <div class="about-icon">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
+          <!-- 棚板 -->
+          <rect x="4" y="46" width="52" height="4" rx="1" fill="#5a3d1e"/>
+          <rect x="4" y="28" width="52" height="3" rx="1" fill="#5a3d1e"/>
+          <!-- 下段の本 -->
+          <rect x="6"  y="32" width="7"  height="14" rx="1" fill="#c0392b"/>
+          <rect x="14" y="34" width="5"  height="12" rx="1" fill="#e67e22"/>
+          <rect x="20" y="31" width="6"  height="15" rx="1" fill="#f1c40f"/>
+          <rect x="27" y="33" width="5"  height="13" rx="1" fill="#27ae60"/>
+          <rect x="33" y="30" width="7"  height="16" rx="1" fill="#2980b9"/>
+          <rect x="41" y="34" width="5"  height="12" rx="1" fill="#8e44ad"/>
+          <rect x="47" y="32" width="7"  height="14" rx="1" fill="#16a085"/>
+          <!-- 上段の本 -->
+          <rect x="6"  y="10" width="6"  height="18" rx="1" fill="#e74c3c"/>
+          <rect x="13" y="13" width="5"  height="15" rx="1" fill="#d35400"/>
+          <rect x="19" y="9"  width="7"  height="19" rx="1" fill="#f39c12"/>
+          <rect x="27" y="12" width="5"  height="16" rx="1" fill="#1abc9c"/>
+          <rect x="33" y="10" width="6"  height="18" rx="1" fill="#3498db"/>
+          <rect x="40" y="13" width="5"  height="15" rx="1" fill="#9b59b6"/>
+          <rect x="46" y="11" width="8"  height="17" rx="1" fill="#e91e8c"/>
+          <!-- 本の背表紙ライン -->
+          <line x1="9"  y1="10" x2="9"  y2="28" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="22" y1="9"  x2="22" y2="28" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="36" y1="10" x2="36" y2="28" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="49" y1="11" x2="49" y2="28" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="9"  y1="32" x2="9"  y2="46" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="23" y1="31" x2="23" y2="46" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="36" y1="30" x2="36" y2="46" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <line x1="44" y1="32" x2="44" y2="46" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <!-- 棚の縦枠 -->
+          <rect x="4"  y="6" width="3" height="44" rx="1" fill="#5a3d1e"/>
+          <rect x="53" y="6" width="3" height="44" rx="1" fill="#5a3d1e"/>
+        </svg>
+      </div>
+        <p class="about-name">森の隠し図書館</p>
+        <p class="about-text">面白そうで買った本を、さらっと正直に紹介するブログです。長い要約より「買う価値あるか」を30秒で。</p>
+      </div>
+
+      <div class="sidebar-widget reveal">
+        <p class="widget-title">最近読んだ本</p>
+        <ul class="widget-list">
+          <li>逆転交渉術<span>心理・行動</span></li>
+          <li>体力おばけへの道<span>健康・運動</span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-widget reveal">
+        <p class="widget-title">カテゴリ</p>
+        <div class="tag-cloud">
+          <span class="tag">雑学・教養</span>
+          <span class="tag">実用</span>
+          <span class="tag">ビジネス</span>
+          <span class="tag">心理</span>
+          <span class="tag">健康</span>
+          <span class="tag">お金</span>
+          <span class="tag">習慣</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <p class="footer-title">森の隠し図書館</p>
+  <p class="footer-copy">© 2026 森の隠し図書館 — 本と静かに向き合う場所</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMenu.classList.toggle('open');
+  });
+
+  // メニュー項目タップで閉じる
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMenu.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
