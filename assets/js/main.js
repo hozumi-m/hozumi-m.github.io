@@ -30,16 +30,17 @@ if (hamburger && navMenu) {
 
 // Pagination & Tag filter
 const allArticles = [
-  {
-    title: '逆転交渉術 まずは「ノー」を引き出せ',
-    author: 'クリス・ヴォス',
-    category: '心理・行動',
-    summary: '元FBI交渉人が、人質交渉の現場で磨いた心理術をビジネスや日常に応用する本。',
-    verdict: '買い ◎',
-    isNew: false,
-    file: '/articles/gyakukan-koshojutsu',
-    tags: ['交渉術', '心理学', 'ビジネス', 'コミュニケーション']
-  },
+ {
+  title: '逆転交渉術 まずは「ノー」を引き出せ',
+  author: 'クリス・ヴォス',
+  category: '心理・行動',
+  summary: '元FBI交渉人が、人質交渉の現場で磨いた心理術をビジネスや日常に応用する本。',
+  verdict: '買い ◎',
+  verdictText: '交渉を技術として捉え直したい人に',
+  isNew: true,
+  file: '/articles/2026-04-11-gyakuten-koshojutsu',
+  tags: ['交渉術', '心理学', 'ビジネス', 'コミュニケーション']
+},
   {
     title: '体力おばけへの道',
     author: '澤木一貴',
@@ -47,7 +48,7 @@ const allArticles = [
     summary: '疲れにくい体は才能じゃなくて習慣。行動体力と防衛体力の2種類を知るだけで、体への向き合い方が変わる。',
     verdict: '買い ◎',
     isNew: true,
-    file: '/articles/tairyoku-obake',
+    file: '/articles/2026-04-11-tairyoku-obake',
     tags: ['健康', '運動', '習慣', 'セルフケア']
   },
   // ↓ 新しい記事はここに追加
@@ -180,3 +181,39 @@ if (document.querySelector('.books-grid')) {
     if (sectionTitle) sectionTitle.textContent = `# ${activeTag}`;
   }
 }
+
+// 今月の一冊を自動表示
+function renderFeatured() {
+  if (!document.getElementById('featured-title')) return;
+  const latest = allArticles[0];
+  if (!latest) return;
+
+  document.getElementById('featured-title').innerHTML = latest.title;
+  document.getElementById('featured-author').textContent = latest.author + ' 著';
+  document.getElementById('featured-body').textContent = latest.summary;
+  document.getElementById('featured-verdict').textContent = latest.verdict + ' — ' + (latest.verdictText || '');
+
+  // タグを表示
+  const pointsEl = document.getElementById('featured-points');
+  if (pointsEl) {
+    pointsEl.innerHTML = `
+      <div class="book-tags" style="margin-bottom:16px;">
+        ${latest.tags.map(t => `<span class="card-tag" data-tag="${t}">${t}</span>`).join('')}
+      </div>
+    `;
+    pointsEl.querySelectorAll('.card-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        activeTag = tag.dataset.tag;
+        currentPage = 1;
+        renderTagFilter();
+        renderCards(1);
+        renderPagination();
+        const sectionTitle = document.getElementById('section-title');
+        if (sectionTitle) sectionTitle.textContent = `# ${activeTag}`;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
+}
+
+renderFeatured();

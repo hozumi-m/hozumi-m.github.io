@@ -1,0 +1,68 @@
+---
+layout: default
+---
+
+<div style="max-width:760px;margin:0 auto;padding:56px 20px 80px;">
+
+  <!-- パンくず -->
+  <p class="breadcrumb reveal">
+    <a href="{{ '/' | relative_url }}">ホーム</a>
+    <span>/</span>
+    <a href="#">{{ page.category }}</a>
+    <span>/</span>
+    {{ page.title }}
+  </p>
+
+  <article class="article-card reveal">
+
+    {% if page.is_new %}
+    <div class="article-bookmark">新着</div>
+    {% endif %}
+
+    <!-- カテゴリ -->
+    <p class="article-category">{{ page.category }}</p>
+
+    <!-- 書名 -->
+    <h1 class="article-title">{{ page.title }}</h1>
+
+    <!-- 著者 -->
+    <p class="article-author">{{ page.author }} 著</p>
+
+    <!-- 本文 -->
+    {{ content }}
+
+    <!-- タグ -->
+    {% if page.tags %}
+    <div class="article-tags">
+      {% for tag in page.tags %}
+      <a href="{{ '/' | relative_url }}?tag={{ tag }}" class="article-tag">{{ tag }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 投稿日 -->
+    <p class="article-date">{{ page.date | date: '%Y年%m月%d日' }}</p>
+
+  </article>
+
+  <!-- 前後の記事ナビ -->
+  <nav class="article-nav reveal">
+    <div class="prev">
+      {% if page.previous.url %}
+      <a href="{{ page.previous.url | relative_url }}">
+        <span class="nav-label">前の記事</span>
+        <span class="nav-title">{{ page.previous.title }}</span>
+      </a>
+      {% endif %}
+    </div>
+    <div class="next">
+      {% if page.next.url %}
+      <a href="{{ page.next.url | relative_url }}">
+        <span class="nav-label">次の記事</span>
+        <span class="nav-title">{{ page.next.title }}</span>
+      </a>
+      {% endif %}
+    </div>
+  </nav>
+
+</div>

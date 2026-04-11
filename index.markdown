@@ -12,20 +12,16 @@ title: ホーム
       <button class="filter-tag active" data-tag="">すべて</button>
     </div>
 
-    <!-- 最新記事フィーチャード -->
-    <div class="featured reveal">
-      <div class="featured-bookmark">新着</div>
-      <p class="featured-label">今月の一冊</p>
-      <h2 class="featured-title">逆転交渉術<br>まずは「ノー」を引き出せ</h2>
-      <p class="featured-author">クリス・ヴォス 著</p>
-      <p class="featured-body">元FBI交渉人が、人質交渉の現場で磨いた心理術をビジネスや日常に応用する本。「交渉は論破ではなく誘導だ」という視点の転換が面白い。</p>
-      <ul class="featured-points">
-        <li>「ノー」は拒絶じゃなく交渉の起点。相手に「ノー」と言わせることで安心感を与え、そこから本音を引き出す</li>
-        <li>相手の感情を言語化する「ラベリング」が実体験ベースで語られていて説得力がある</li>
-        <li>「なぜ」より「どうしたら」で質問しろという細かい使い分けが刺さった</li>
-      </ul>
-      <span class="verdict-tag">買い ◎ — 交渉を技術として捉え直したい人に</span>
-    </div>
+<!-- 最新記事フィーチャード（自動） -->
+<div class="featured reveal" id="featured-article">
+  <div class="featured-bookmark">新着</div>
+  <p class="featured-label">今月の一冊</p>
+  <h2 class="featured-title" id="featured-title"></h2>
+  <p class="featured-author" id="featured-author"></p>
+  <p class="featured-body" id="featured-body"></p>
+  <div id="featured-points"></div>
+  <span class="verdict-tag" id="featured-verdict"></span>
+</div>
 
     <!-- 記事カード一覧 -->
     <div class="books-grid"></div>
