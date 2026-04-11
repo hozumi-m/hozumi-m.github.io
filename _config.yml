@@ -8,3 +8,6 @@ plugins:
 
 markdown: kramdown
 permalink: /articles/:name
+
+kramdown:
+  parse_block_html: true
