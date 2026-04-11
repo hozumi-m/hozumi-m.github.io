@@ -1,0 +1,15 @@
+<nav>
+  <div class="nav-inner">
+    <span class="nav-site-title">{{ site.title }}</span>
+    <button class="hamburger" id="hamburger" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="{{ '/' | relative_url }}">すべての本</a></li>
+      <li><a href="{{ '/category/zatsugan' | relative_url }}">雑学・教養</a></li>
+      <li><a href="{{ '/category/jitsuyo' | relative_url }}">実用・ビジネス</a></li>
+      <li><a href="{{ '/category/shinri' | relative_url }}">心理・行動</a></li>
+      <li><a href="{{ '/about' | relative_url }}">このブログについて</a></li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,10 @@
+title: 森の隠し図書館
+description: 面白そうで手に取った本と、静かに向き合う場所
+baseurl: ""
+url: "https://hozumi-m.github.io"
+
+plugins:
+  - jekyll-feed
+
+markdown: kramdown
+permalink: /articles/:name

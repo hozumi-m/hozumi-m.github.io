@@ -1,0 +1,100 @@
+<header>
+  <div class="forest-scene">
+    <svg viewBox="0 0 1200 280" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a2e1a" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#2d4a2d" stop-opacity="0.5"/>
+        </linearGradient>
+        <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6b4a2a"/>
+          <stop offset="100%" stop-color="#4a3018"/>
+        </linearGradient>
+        <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a2510"/>
+          <stop offset="100%" stop-color="#2a1a08"/>
+        </linearGradient>
+        <linearGradient id="winGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f5d080"/>
+          <stop offset="100%" stop-color="#e8a030"/>
+        </linearGradient>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2d4a2d"/>
+          <stop offset="100%" stop-color="#1a2e1a"/>
+        </linearGradient>
+        <filter id="blur-slight"><feGaussianBlur stdDeviation="1.5"/></filter>
+        <filter id="blur-bg"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+      <rect x="0" y="240" width="1200" height="40" fill="url(#groundGrad)"/>
+      <rect x="440" y="80" width="320" height="165" fill="url(#wallGrad)" filter="url(#blur-slight)"/>
+      <line x1="440" y1="110" x2="760" y2="110" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="140" x2="760" y2="140" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="170" x2="760" y2="170" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <line x1="440" y1="200" x2="760" y2="200" stroke="#5a3d1e" stroke-width="1.5" opacity="0.4"/>
+      <rect x="380" y="115" width="80" height="130" fill="#5f4020" filter="url(#blur-slight)"/>
+      <rect x="740" y="115" width="80" height="130" fill="#5f4020" filter="url(#blur-slight)"/>
+      <polygon points="420,80 600,20 780,80" fill="url(#roofGrad)" filter="url(#blur-slight)"/>
+      <polygon points="365,115 420,80 460,115" fill="#2a1a08" filter="url(#blur-slight)"/>
+      <polygon points="740,115 780,80 835,115" fill="#2a1a08" filter="url(#blur-slight)"/>
+      <rect x="470" y="18" width="18" height="40" fill="#3a2510" filter="url(#blur-slight)"/>
+      <rect x="700" y="18" width="18" height="40" fill="#3a2510" filter="url(#blur-slight)"/>
+      <g class="window-warm">
+        <rect x="490" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="493" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="507" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+      </g>
+      <g class="window-warm">
+        <rect x="585" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="588" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="602" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+      </g>
+      <g class="window-warm">
+        <rect x="680" y="100" width="30" height="40" rx="2" fill="#2a1a08"/>
+        <rect x="683" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+        <rect x="697" y="103" width="11" height="34" fill="url(#winGlow)" opacity="0.85"/>
+      </g>
+      <rect x="572" y="180" width="56" height="65" rx="1" fill="#2a1a08"/>
+      <path d="M572,185 Q600,162 628,185" fill="#2a1a08"/>
+      <g class="tree-grp-l1">
+        <polygon points="0,280 45,100 90,280" fill="#1a3020"/>
+        <polygon points="15,280 45,130 75,280" fill="#1e3820"/>
+        <rect x="38" y="240" width="14" height="40" fill="#2a1a08"/>
+      </g>
+      <g class="tree-grp-l2">
+        <polygon points="80,280 130,85 180,280" fill="#1e3820"/>
+        <polygon points="95,280 130,115 165,280" fill="#243f24"/>
+        <rect x="122" y="238" width="16" height="42" fill="#2a1a08"/>
+      </g>
+      <g class="tree-grp-l3">
+        <polygon points="230,280 295,60 360,280" fill="#1a2e1a"/>
+        <polygon points="250,280 295,95 340,280" fill="#1e3520"/>
+        <polygon points="255,280 295,158 335,280" fill="#1e3820"/>
+        <rect x="286" y="236" width="18" height="44" fill="#2a1a08"/>
+      </g>
+      <g class="tree-grp-r1">
+        <polygon points="840,280 905,60 970,280" fill="#1a2e1a"/>
+        <polygon points="860,280 905,95 950,280" fill="#1e3520"/>
+        <polygon points="865,280 905,158 945,280" fill="#1e3820"/>
+        <rect x="896" y="236" width="18" height="44" fill="#2a1a08"/>
+      </g>
+      <g class="tree-grp-r2">
+        <polygon points="1020,280 1070,85 1120,280" fill="#1e3820"/>
+        <polygon points="1035,280 1070,115 1105,280" fill="#243f24"/>
+        <rect x="1062" y="238" width="16" height="42" fill="#2a1a08"/>
+      </g>
+      <g class="tree-grp-r3">
+        <polygon points="1110,280 1155,100 1200,280" fill="#1a3020"/>
+        <polygon points="1125,280 1155,130 1185,280" fill="#1e3820"/>
+        <rect x="1148" y="240" width="14" height="40" fill="#2a1a08"/>
+      </g>
+      <rect x="0" y="255" width="1200" height="25" fill="#1a2e1a"/>
+      <rect x="0" y="0" width="1200" height="280" fill="url(#skyGrad)"/>
+    </svg>
+  </div>
+  <div class="header-content">
+    <div class="site-badge">Book Review</div>
+    <h1 class="site-title"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+    <p class="site-subtitle">{{ site.description }}</p>
+  </div>
+  <div class="ground-line"></div>
+</header>
